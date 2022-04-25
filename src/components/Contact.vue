@@ -11,7 +11,7 @@
 
       <transition>
         <div
-          v-if="!isFormValid"
+          v-if="isShowAlertBox"
           class="mb-3 py-2 text-center alert-danger rounded"
         >
           <span>
@@ -23,7 +23,11 @@
 
       <div class="mb-3">
         <label for="conpanyName" class="form-label">会社名</label>
-        <span class="ml-2 text-danger rounded">[!]アラートを表示</span>
+        <span
+          v-if="!!validationMessageConpanyName"
+          class="ml-2 text-danger rounded"
+          >[!]{{ validationMessageConpanyName }}</span
+        >
         <input
           type="text"
           class="form-control"
@@ -36,7 +40,11 @@
 
       <div class="mb-3">
         <label for="contactPersonName" class="form-label">担当者名</label>
-        <span class="ml-2 text-danger rounded">[!]アラートを表示</span>
+        <span
+          v-if="!!validationMessageContactPersonName"
+          class="ml-2 text-danger rounded"
+          >[!]{{ validationMessageContactPersonName }}</span
+        >
         <input
           type="text"
           class="form-control"
@@ -49,7 +57,9 @@
 
       <div class="mb-3">
         <label for="mail" class="form-label">メールアドレス</label>
-        <span class="ml-2 text-danger rounded">[!]アラートを表示</span>
+        <span v-if="!!validationMessageMail" class="ml-2 text-danger rounded"
+          >[!]{{ validationMessageMail }}</span
+        >
         <input
           type="email"
           class="form-control"
@@ -81,7 +91,11 @@
           <label for="contractNumber" class="form-label"
             >契約番号（数字4ケタ）</label
           >
-          <span class="ml-2 text-danger rounded">[!]アラートを表示</span>
+          <span
+            v-if="!!validationMessageContractNumber"
+            class="ml-2 text-danger rounded"
+            >[!]{{ validationMessageContractNumber }}</span
+          >
           <input
             type="text"
             class="form-control"
@@ -97,7 +111,9 @@
         <label for="content" class="form-label"
           >お問い合わせ要件（255文字まで）</label
         >
-        <span class="ml-2 text-danger rounded">[!]アラートを表示</span>
+        <span v-if="!!validationMessageContent" class="ml-2 text-danger rounded"
+          >[!]{{ validationMessageContent }}</span
+        >
         <textarea
           class="form-control"
           id="content"
@@ -108,7 +124,11 @@
       </div>
 
       <div class="text-center">
-        <button type="button" class="btn btn-primary btn-lg" @click="submit">
+        <button
+          type="button"
+          class="btn btn-primary btn-lg"
+          @click="clickSubmitButton"
+        >
           送信する
         </button>
       </div>
@@ -127,12 +147,20 @@ export default {
       category: "", // お問い合わせ分類
       contractNumber: "", // 契約番号（数字4ケタ）
       content: "", // お問い合わせ要件（255文字まで）
-      isFormValid: true,
+      isShowAlertBox: false,
+      validationMessageConpanyName: "",
+      validationMessageContactPersonName: "",
+      validationMessageMail: "",
+      validationMessageContractNumber: "",
+      validationMessageContent: "",
     };
   },
   computed: {
     isSelectedMaintenanceInfo() {
       return this.category === "maintenanceInfo";
+    },
+    isValidForm() {
+      return true; // TODO: 実装
     },
   },
   methods: {
@@ -154,11 +182,84 @@ export default {
     changeContent(ev) {
       this.content = ev.target.value;
     },
-    submit() {
+    clickSubmitButton() {
       this.validateForm();
+
+      if (!this.isValidForm) {
+        this.isShowAlertBox = true;
+        return;
+      }
+      this.submit();
+    },
+    submit() {
+      console.log("submit"); // TODO: 実装
     },
     validateForm() {
-      this.isFormValid = false;
+      this.validateConpanyName();
+      this.validateContactPersonName();
+      this.validateMail();
+      this.validateContractNumber();
+      this.validateContent();
+    },
+    validateConpanyName() {
+      if (this.conpanyName.length === 0) {
+        this.validationMessageConpanyName = "会社名は必須です。";
+      } else if (this.conpanyName.length > 64) {
+        this.validationMessageConpanyName =
+          "会社名は64文字以内で入力してください。";
+      } else {
+        this.validationMessageConpanyName = "";
+      }
+    },
+    validateContactPersonName() {
+      if (this.contactPersonName.length === 0) {
+        this.validationMessageContactPersonName = "担当者名は必須です。";
+      } else if (this.contactPersonName.length > 64) {
+        this.validationMessageContactPersonName =
+          "担当者名は64文字以内で入力してください。";
+      } else {
+        this.validationMessageContactPersonName = "";
+      }
+    },
+    validateMail() {
+      const mailRegExp =
+        /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]+.[A-Za-z0-9]+$/;
+
+      if (this.mail.length === 0) {
+        this.validationMessageMail = "メールアドレスは必須です。";
+      } else if (!mailRegExp.test(this.mail)) {
+        this.validationMessageMail =
+          "メールアドレスを正しい形式で入力してください。";
+      } else {
+        this.validationMessageMail = "";
+      }
+    },
+    validateContractNumber() {
+      if (this.category !== "maintenanceInfo") {
+        this.validationMessageContractNumber = "";
+        return;
+      }
+
+      const contractNumberRegExp = /^[0-9]{4}$/;
+
+      if (this.contractNumber.length === 0) {
+        this.validationMessageContractNumber = "契約番号は必須です。";
+      } else if (!contractNumberRegExp.test(this.contractNumber)) {
+        this.validationMessageContractNumber =
+          "契約番号を数字4ケタで入力してください。";
+      } else {
+        this.validationMessageContractNumber = "";
+      }
+    },
+    validateContent() {
+      if (this.content.length === 0) {
+        this.validationMessageContent = "お問い合わせ要件は必須です。";
+      } else if (this.content.length > 255) {
+        this.validationMessageContent =
+          "お問い合わせ要件は255文字以内で入力してください。";
+      } else {
+        this.validationMessageContent = "";
+      }
     },
   },
 };

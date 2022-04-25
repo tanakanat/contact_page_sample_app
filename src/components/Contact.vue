@@ -3,10 +3,20 @@
     <main class="my-5">
       <div class="pb-3 text-center">
         <h2>お問い合わせフォーム</h2>
-        <p class="lead">
+        <span>
           お客さまからのご質問をお問い合わせフォームにて受け付けております。<br />
           必要事項をご記入の上、「送信する」ボタンを押してください。
-        </p>
+        </span>
+      </div>
+
+      <div
+        v-if="!isFormValid"
+        class="mb-3 py-2 text-center alert-danger rounded"
+      >
+        <span>
+          入力に誤りがあるか、未入力になっています。<br />
+          下記について再度ご確認のうえ、修正してください。
+        </span>
       </div>
 
       <div class="mb-3">
@@ -89,7 +99,9 @@
       </div>
 
       <div class="text-center">
-        <button type="button" class="btn btn-primary btn-lg">送信する</button>
+        <button type="button" class="btn btn-primary btn-lg" @click="submit">
+          送信する
+        </button>
       </div>
     </main>
   </div>
@@ -106,6 +118,7 @@ export default {
       category: "", // お問い合わせ分類
       contractNumber: "", // 契約番号（数字4ケタ）
       content: "", // お問い合わせ要件（255文字まで）
+      isFormValid: true,
     };
   },
   methods: {
@@ -126,6 +139,12 @@ export default {
     },
     changeContent(ev) {
       this.content = ev.target.value;
+    },
+    submit() {
+      this.validateForm();
+    },
+    validateForm() {
+      this.isFormValid = false;
     },
   },
 };

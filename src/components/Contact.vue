@@ -16,16 +16,20 @@
           class="form-control"
           id="conpanyName"
           placeholder="FooBar株式会社"
+          :value="conpanyName"
+          @input="changeConpanyName"
         />
       </div>
 
       <div class="mb-3">
-        <label for="contactPerson" class="form-label">担当者名</label>
+        <label for="contactPersonName" class="form-label">担当者名</label>
         <input
           type="text"
           class="form-control"
-          id="contactPerson"
+          id="contactPersonName"
           placeholder="山田太郎"
+          :value="contactPersonName"
+          @input="changeContactPersonName"
         />
       </div>
 
@@ -36,16 +40,24 @@
           class="form-control"
           id="mail"
           placeholder="foo@example.com"
+          :value="mail"
+          @input="changeMail"
         />
       </div>
 
       <div class="mb-3">
         <label for="category" class="mr-2 form-label">お問い合わせ分類</label>
-        <select class="form-select" id="category" required>
+        <select
+          class="form-select"
+          id="category"
+          required
+          :value="category"
+          @input="changeCategory"
+        >
           <option value="">選択</option>
-          <option>仕様</option>
-          <option>契約</option>
-          <option>メンテナンス情報</option>
+          <option value="specification">仕様</option>
+          <option value="contract">契約</option>
+          <option value="maintenanceInfo">メンテナンス情報</option>
         </select>
       </div>
 
@@ -58,6 +70,8 @@
           class="form-control"
           id="contractNumber"
           placeholder="1234"
+          :value="contractNumber"
+          @input="changeContractNumber"
         />
       </div>
 
@@ -65,7 +79,13 @@
         <label for="content" class="form-label"
           >お問い合わせ要件（255文字まで）</label
         >
-        <textarea class="form-control" id="content" rows="3"></textarea>
+        <textarea
+          class="form-control"
+          id="content"
+          rows="3"
+          :value="content"
+          @input="changeContent"
+        ></textarea>
       </div>
 
       <div class="text-center">
@@ -78,6 +98,36 @@
 <script>
 export default {
   name: "Contact",
+  data() {
+    return {
+      conpanyName: "", // 会社名
+      contactPersonName: "", // 担当者名
+      mail: "", // メールアドレス
+      category: "", // お問い合わせ分類
+      contractNumber: "", // 契約番号（数字4ケタ）
+      content: "", // お問い合わせ要件（255文字まで）
+    };
+  },
+  methods: {
+    changeConpanyName(ev) {
+      this.conpanyName = ev.target.value;
+    },
+    changeContactPersonName(ev) {
+      this.contactPersonName = ev.target.value;
+    },
+    changeMail(ev) {
+      this.mail = ev.target.value;
+    },
+    changeCategory(ev) {
+      this.category = ev.target.value;
+    },
+    changeContractNumber(ev) {
+      this.contractNumber = ev.target.value;
+    },
+    changeContent(ev) {
+      this.content = ev.target.value;
+    },
+  },
 };
 </script>
 

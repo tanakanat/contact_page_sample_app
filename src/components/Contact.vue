@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <main class="my-5">
+    <main v-if="!hasSubmitted" class="my-5">
       <div class="pb-3 text-center">
         <h2>お問い合わせフォーム</h2>
         <span>
@@ -106,16 +106,19 @@
         </button>
       </div>
     </main>
+    <ContactSubmitted v-else />
   </div>
 </template>
 
 <script>
 import ContactInput from "./ContactInput";
+import ContactSubmitted from "./ContactSubmitted";
 
 export default {
   name: "Contact",
   components: {
     ContactInput,
+    ContactSubmitted,
   },
   data() {
     return {
@@ -131,6 +134,7 @@ export default {
       validationMessageMail: "",
       validationMessageContractNumber: "",
       validationMessageContent: "",
+      hasSubmitted: false,
     };
   },
   computed: {
@@ -177,6 +181,7 @@ export default {
     },
     submit() {
       console.log("submit"); // TODO: 実装
+      this.hasSubmitted = true;
     },
     validateForm() {
       this.validateConpanyName();

@@ -141,6 +141,9 @@ export default {
     isSelectedMaintenanceInfo() {
       return this.category === "maintenanceInfo";
     },
+    computedContractNumber() {
+      return this.isSelectedMaintenanceInfo ? this.contractNumber : null;
+    },
     isValidForm() {
       return !(
         this.validationMessageConpanyName ||
@@ -180,7 +183,14 @@ export default {
       this.submit();
     },
     submit() {
-      console.log("submit"); // TODO: 実装
+      console.table({
+        conpanyName: this.conpanyName,
+        contactPersonName: this.contactPersonName,
+        mail: this.mail,
+        category: this.category,
+        contractNumber: this.computedContractNumber,
+        content: this.content,
+      });
       this.hasSubmitted = true;
     },
     validateForm() {

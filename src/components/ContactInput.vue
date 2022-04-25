@@ -26,6 +26,9 @@ export default {
     type: {
       type: String,
       required: true,
+      validator(val) {
+        return ["text", "email"].includes(val);
+      },
     },
     label: {
       type: String,

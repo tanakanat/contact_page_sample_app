@@ -160,7 +160,13 @@ export default {
       return this.category === "maintenanceInfo";
     },
     isValidForm() {
-      return true; // TODO: 実装
+      return !(
+        this.validationMessageConpanyName ||
+        this.validationMessageContactPersonName ||
+        this.validationMessageMail ||
+        this.validationMessageContractNumber ||
+        this.validationMessageContent
+      );
     },
   },
   methods: {

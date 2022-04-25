@@ -9,18 +9,21 @@
         </span>
       </div>
 
-      <div
-        v-if="!isFormValid"
-        class="mb-3 py-2 text-center alert-danger rounded"
-      >
-        <span>
-          入力に誤りがあるか、未入力になっています。<br />
-          下記について再度ご確認のうえ、修正してください。
-        </span>
-      </div>
+      <transition>
+        <div
+          v-if="!isFormValid"
+          class="mb-3 py-2 text-center alert-danger rounded"
+        >
+          <span>
+            入力に誤りがあるか、未入力になっています。<br />
+            下記について再度ご確認のうえ、修正してください。
+          </span>
+        </div>
+      </transition>
 
       <div class="mb-3">
         <label for="conpanyName" class="form-label">会社名</label>
+        <span class="ml-2 text-danger rounded">[!]アラートを表示</span>
         <input
           type="text"
           class="form-control"
@@ -33,6 +36,7 @@
 
       <div class="mb-3">
         <label for="contactPersonName" class="form-label">担当者名</label>
+        <span class="ml-2 text-danger rounded">[!]アラートを表示</span>
         <input
           type="text"
           class="form-control"
@@ -45,6 +49,7 @@
 
       <div class="mb-3">
         <label for="mail" class="form-label">メールアドレス</label>
+        <span class="ml-2 text-danger rounded">[!]アラートを表示</span>
         <input
           type="email"
           class="form-control"
@@ -71,24 +76,28 @@
         </select>
       </div>
 
-      <div class="mb-3">
-        <label for="contractNumber" class="form-label"
-          >契約番号（数字4ケタ）</label
-        >
-        <input
-          type="text"
-          class="form-control"
-          id="contractNumber"
-          placeholder="1234"
-          :value="contractNumber"
-          @input="changeContractNumber"
-        />
-      </div>
+      <transition>
+        <div v-if="isSelectedMaintenanceInfo" class="mb-3">
+          <label for="contractNumber" class="form-label"
+            >契約番号（数字4ケタ）</label
+          >
+          <span class="ml-2 text-danger rounded">[!]アラートを表示</span>
+          <input
+            type="text"
+            class="form-control"
+            id="contractNumber"
+            placeholder="1234"
+            :value="contractNumber"
+            @input="changeContractNumber"
+          />
+        </div>
+      </transition>
 
       <div class="mb-3">
         <label for="content" class="form-label"
           >お問い合わせ要件（255文字まで）</label
         >
+        <span class="ml-2 text-danger rounded">[!]アラートを表示</span>
         <textarea
           class="form-control"
           id="content"
@@ -121,6 +130,11 @@ export default {
       isFormValid: true,
     };
   },
+  computed: {
+    isSelectedMaintenanceInfo() {
+      return this.category === "maintenanceInfo";
+    },
+  },
   methods: {
     changeConpanyName(ev) {
       this.conpanyName = ev.target.value;
@@ -151,4 +165,25 @@ export default {
 </script>
 
 <style scoped>
+/* アニメーション中のスタイル */
+.v-leave-active,
+.v-enter-active {
+  transition: opacity 0.2s;
+}
+
+/* 表示アニメーション */
+.v-enter {
+  opacity: 0;
+}
+.v-enter-to {
+  opacity: 1;
+}
+
+/* 非表示アニメーション */
+.v-leave {
+  opacity: 1;
+}
+.v-leave-to {
+  opacity: 0;
+}
 </style>

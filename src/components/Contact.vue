@@ -21,54 +21,35 @@
         </div>
       </transition>
 
-      <div class="mb-3">
-        <label for="conpanyName" class="form-label">会社名</label>
-        <span
-          v-if="!!validationMessageConpanyName"
-          class="ml-2 text-danger rounded"
-          >[!]{{ validationMessageConpanyName }}</span
-        >
-        <input
-          type="text"
-          class="form-control"
-          id="conpanyName"
-          placeholder="FooBar株式会社"
-          :value="conpanyName"
-          @input="changeConpanyName"
-        />
-      </div>
+      <ContactInput
+        id="conpanyName"
+        type="text"
+        label="会社名"
+        :value="conpanyName"
+        placeHolder="FooBar株式会社"
+        :validationMessage="validationMessageConpanyName"
+        @changeValue="changeConpanyName"
+      />
 
-      <div class="mb-3">
-        <label for="contactPersonName" class="form-label">担当者名</label>
-        <span
-          v-if="!!validationMessageContactPersonName"
-          class="ml-2 text-danger rounded"
-          >[!]{{ validationMessageContactPersonName }}</span
-        >
-        <input
-          type="text"
-          class="form-control"
-          id="contactPersonName"
-          placeholder="山田太郎"
-          :value="contactPersonName"
-          @input="changeContactPersonName"
-        />
-      </div>
+      <ContactInput
+        id="contactPersonName"
+        type="text"
+        label="担当者名"
+        :value="contactPersonName"
+        placeHolder="山田太郎"
+        :validationMessage="validationMessageContactPersonName"
+        @changeValue="changeContactPersonName"
+      />
 
-      <div class="mb-3">
-        <label for="mail" class="form-label">メールアドレス</label>
-        <span v-if="!!validationMessageMail" class="ml-2 text-danger rounded"
-          >[!]{{ validationMessageMail }}</span
-        >
-        <input
-          type="email"
-          class="form-control"
-          id="mail"
-          placeholder="foo@example.com"
-          :value="mail"
-          @input="changeMail"
-        />
-      </div>
+      <ContactInput
+        id="mail"
+        type="email"
+        label="メールアドレス"
+        :value="mail"
+        placeHolder="foo@example.co"
+        :validationMessage="validationMessageMail"
+        @changeValue="changeMail"
+      />
 
       <div class="mb-3">
         <label for="category" class="mr-2 form-label">お問い合わせ分類</label>
@@ -87,24 +68,16 @@
       </div>
 
       <transition>
-        <div v-if="isSelectedMaintenanceInfo" class="mb-3">
-          <label for="contractNumber" class="form-label"
-            >契約番号（数字4ケタ）</label
-          >
-          <span
-            v-if="!!validationMessageContractNumber"
-            class="ml-2 text-danger rounded"
-            >[!]{{ validationMessageContractNumber }}</span
-          >
-          <input
-            type="text"
-            class="form-control"
-            id="contractNumber"
-            placeholder="1234"
-            :value="contractNumber"
-            @input="changeContractNumber"
-          />
-        </div>
+        <ContactInput
+          v-if="isSelectedMaintenanceInfo"
+          id="contractNumber"
+          type="text"
+          label="契約番号（数字4ケタ）"
+          :value="contractNumber"
+          placeHolder="1234"
+          :validationMessage="validationMessageContractNumber"
+          @changeValue="changeContractNumber"
+        />
       </transition>
 
       <div class="mb-3">
@@ -137,8 +110,13 @@
 </template>
 
 <script>
+import ContactInput from "./ContactInput";
+
 export default {
   name: "Contact",
+  components: {
+    ContactInput,
+  },
   data() {
     return {
       conpanyName: "", // 会社名

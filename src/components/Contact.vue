@@ -52,15 +52,20 @@
       />
 
       <div class="mb-3">
-        <label for="category" class="mr-2 form-label">お問い合わせ分類</label>
+        <label for="category" class="form-label">お問い合わせ分類</label>
+        <span
+          v-if="!!validationMessageCategory"
+          class="ml-2 text-danger rounded"
+          >[!]{{ validationMessageCategory }}</span
+        >
         <select
-          class="form-select"
+          class="d-block form-select"
           id="category"
           required
           :value="category"
           @input="changeCategory"
         >
-          <option value="">選択</option>
+          <option value="">未選択</option>
           <option value="specification">仕様</option>
           <option value="contract">契約</option>
           <option value="maintenanceInfo">メンテナンス情報</option>
@@ -132,6 +137,7 @@ export default {
       validationMessageConpanyName: "",
       validationMessageContactPersonName: "",
       validationMessageMail: "",
+      validationMessageCategory: "",
       validationMessageContractNumber: "",
       validationMessageContent: "",
       hasSubmitted: false,
@@ -149,6 +155,7 @@ export default {
         this.validationMessageConpanyName ||
         this.validationMessageContactPersonName ||
         this.validationMessageMail ||
+        this.validationMessageCategory ||
         this.validationMessageContractNumber ||
         this.validationMessageContent
       );
@@ -197,6 +204,7 @@ export default {
       this.validateConpanyName();
       this.validateContactPersonName();
       this.validateMail();
+      this.validateCategory();
       this.validateContractNumber();
       this.validateContent();
     },
@@ -231,6 +239,13 @@ export default {
           "メールアドレスを正しい形式で入力してください。";
       } else {
         this.validationMessageMail = "";
+      }
+    },
+    validateCategory() {
+      if (this.category === "") {
+        this.validationMessageCategory = "お問い合わせ分類を選択してください。";
+      } else {
+        this.validationMessageCategory = "";
       }
     },
     validateContractNumber() {

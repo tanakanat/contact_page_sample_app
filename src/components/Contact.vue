@@ -1,3 +1,4 @@
+/* eslint-disable vue/no-unused-vars */
 <template>
   <div class="container">
     <main v-if="!hasSubmitted" class="my-5">
@@ -65,10 +66,13 @@
           :value="category"
           @input="changeCategory"
         >
-          <option value="">未選択</option>
-          <option value="specification">仕様</option>
-          <option value="contract">契約</option>
-          <option value="maintenanceInfo">メンテナンス情報</option>
+          <option
+            v-for="categoryOption in categoryOptionList"
+            :value="categoryOption.value"
+            :key="categoryOption.value"
+          >
+            {{ categoryOption.label }}
+          </option>
         </select>
       </div>
 
@@ -119,6 +123,13 @@
 import ContactInput from "./ContactInput";
 import ContactSubmitted from "./ContactSubmitted";
 
+const categoryOptionList = [
+  { label: "未選択", value: "" },
+  { label: "仕様", value: "specification" },
+  { label: "契約", value: "contract" },
+  { label: "メンテナンス情報", value: "maintenanceInfo" },
+];
+
 export default {
   name: "Contact",
   components: {
@@ -144,6 +155,9 @@ export default {
     };
   },
   computed: {
+    categoryOptionList() {
+      return categoryOptionList;
+    },
     isSelectedMaintenanceInfo() {
       return this.category === "maintenanceInfo";
     },
